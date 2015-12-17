@@ -44,10 +44,9 @@ io.on('connection', function (socket) {
     console.log(data);
 	});
 
-  // wysłanie do wszystkich informacji o lokalizacjach
-  // o zniszczeniach, kolizjach, itp.
-
-  // socket.broadcast.emit('message', data);
+  tiefigher.broadcast(function(data) {
+    socket.emit('message', data);
+  });
 });
 
 server.listen(PORT);
