@@ -1,0 +1,11 @@
+{
+  "ships": [
+    {
+      "id": 1234,
+      "position": [1,2,3],
+      "vector": [1,2,3],
+      "fire": true,
+      "hit": false,
+    }
+  ]
+}
