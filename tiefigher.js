@@ -1,9 +1,11 @@
 require('array.prototype.find');
 
 var DIMENSION = 50000;
-var DEATH = 10000;
-var SPEED = 1000;
+var DEATH = 6371;
+var DEATH_2 = DEATH * 2;
+var SPEED = 10000;
 var INTERVAL = 100;
+var MAXTILTCHANGE = 0.1;
 
 var broadcastCallback = null;
 
@@ -19,9 +21,14 @@ function normalizeVector(vector) {
 }
 
 function calculateVector(vector, joystick) {
-  vector[0] = vector[0] + joystick[0];
-  vector[1] = vector[1] + joystick[1];
-  vector[2] = vector[2]
+  var tau = Math.acos(vector[2]);
+  var fi = Math.atan(vector[1]/vector[0]);
+  tau += MAXTILTCHANGE * joystick[0];
+  fi += MAXTILTCHANGE * joystick[1];
+  vector[0] = Math.sin(tau) * Math.cos(fi);
+  vector[1] = Math.sin(tau) * Math.sin(fi);
+  vector[2] = Math.cos(tau);
+  console.log(normalizeVector(vector));
   return normalizeVector(vector);
 }
 
@@ -39,18 +46,23 @@ function calculateRotation(rotation, joystick) {
 
 function calculateHit(hit, position) {
   if(hit) {
-    return hit;
+    return true;
   }
   if(position[0] <= -DIMENSION || position[0] >= DIMENSION) {
-    return hit;
+    return true;
   }
   if(position[1] <= -DIMENSION || position[1] >= DIMENSION) {
-    return hit;
+    return true;
   }
   if(position[2] <= -DIMENSION || position[2] >= DIMENSION) {
-    return hit;
+    return true;
   }
-  // zderzenie z gwiazdą
+  if(position[0] <= DEATH && position[0] >= -1*DEATH
+    && position[1] <= DEATH && position[1] >= -1*DEATH
+    && position[2] <= DEATH && position[2] >= -1*DEATH
+  ) {
+    return true;
+  }
   // strzał
   return false;
 }
@@ -60,24 +72,28 @@ function getRandomVectionItem() {
 }
 
 function getRandomPosition() {
-  var p = Math.round((getRandomVectionItem())*(DIMENSION-DEATH));
-  if(p > 0 && p < DEATH) {
-    p += DEATH;
-  } else if(p < 0 && p > -DEATH) {
-    p -= DEATH;
+  var p = Math.round((getRandomVectionItem())*(DIMENSION-DEATH_2));
+  if(p > 0 && p < DEATH_2) {
+    p += DEATH_2;
+  } else if(p < 0 && p > -DEATH_2) {
+    p -= DEATH_2;
   }
   return p;
 }
 
 function create(id) {
+  var position = [getRandomPosition(),getRandomPosition(),getRandomPosition()];
+  var vector = normalizeVector([position[0]*-1, position[1]*-1, position[2]*-1]);
+
   if(ships[id]) {
+    ships[id].position = position;
+    ships[id].vector = vector;
     return;
   }
-  position = [getRandomPosition(),getRandomPosition(),getRandomPosition()];
   ships[id] = {
     "id" : id,
     "position": position,
-    "vector": normalizeVector([position[0]*-1, position[1]*-1, position[2]*-1]),
+    "vector": vector,
     "rotation": getRandomVectionItem(),
     "fire": false,
     "hit": false
@@ -112,6 +128,14 @@ function fire(id, fire) {
 
 exports.start = function(message) {
   create(message.id);
+  create(message.id + '_1');
+  create(message.id + '_2');
+  create(message.id + '_3');
+  create(message.id + '_4');
+  create(message.id + '_5');
+  create(message.id + '_6');
+  create(message.id + '_7');
+  create(message.id + '_9');
 }
 
 exports.end = function(message) {
@@ -150,13 +174,13 @@ function calculate() {
     ship.vector = calculateVector(ship.vector, joysticks[key]);
     ship.position = calculatePosition(ship.position, ship.vector, timestamp - timestamps[key]);
     ship.rotation = calculateRotation(ship.rotation, joysticks[key]);
-    ship.hit = calculateHit(ship.hit, ship.position);
+    ship.hit = false; // calculateHit(ship.hit, ship.position);
 
     timestamps[key] = timestamp;
 
-    if(ship.hit) {
-      hits[key] = true;
-    }
+    // if(ship.hit) {
+    //   hits[key] = true;
+    // }
   });
 
   var message = {

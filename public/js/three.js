@@ -25,7 +25,7 @@ var d, dPlanet, dMoon, dMoonVec = new THREE.Vector3();
 
 var clock = new THREE.Clock();
 
-var TIE_SPEED = 1; //100 punktów na sekunde
+var TIE_SPEED = 10000; //100 punktów na sekunde
 
 var data = {
   ships: [
@@ -92,13 +92,13 @@ function init() {
 	scene = new THREE.Scene();
 	scene.fog = new THREE.FogExp2( 0x000000, 0.00000025 );
 
-	controls = new THREE.FlyControls( camera );
+	// controls = new THREE.FlyControls( camera );
 
-	controls.movementSpeed = 1000;
-	controls.domElement = container;
-	controls.rollSpeed = Math.PI / 24;
-	controls.autoForward = false;
-	controls.dragToLook = false;
+	// controls.movementSpeed = 1000;
+	// controls.domElement = container;
+	// controls.rollSpeed = Math.PI / 24;
+	// controls.autoForward = false;
+	// controls.dragToLook = false;
 
 	dirLight = new THREE.DirectionalLight( 0xffffff );
 	dirLight.position.set( -1, 0, 1 ).normalize();
@@ -273,7 +273,7 @@ function update() {
 	delta = (new Date().getTime() - lastCalledTime)/1000;
 	lastCalledTime = Date.now();
 
-	var deltaSpeed = TIE_SPEED/delta;
+	var deltaSpeed = TIE_SPEED*delta;
 
 	for(var key in fighters) {
 		var fighter = fighters[key];
@@ -281,10 +281,14 @@ function update() {
 		var y = fighter.mesh.position.y + fighter.vector.y*deltaSpeed;
 		var z = fighter.mesh.position.z + fighter.vector.z*deltaSpeed;
 		fighter.mesh.position.set(x, y, z);
-		console.log(fighter.mesh.position);
-    console.log(fighter.vector);
-		// console.log(fighter.mesh.position);
 	};
+
+	if (fighters.hasOwnProperty(id)) {
+		camera.position.x = fighters[id].mesh.position.x;
+		camera.position.y = fighters[id].mesh.position.y;
+		camera.position.z = fighters[id].mesh.position.z;
+		camera.lookAt(new THREE.Vector3(fighters[id].mesh.position.x + fighters[id].vector.x, fighters[id].mesh.position.y + fighters[id].vector.y, fighters[id].mesh.position.z + fighters[id].vector.z));
+	}
 }
 
 function render() {
@@ -311,8 +315,8 @@ function render() {
 
 	}
 
-	controls.movementSpeed = 0.33 * d;
-	controls.update( delta );
+	// controls.movementSpeed = 0.33 * d;
+	// controls.update( delta );
 
 	renderer.clear();
 	composer.render( delta );
@@ -341,6 +345,12 @@ socket.on('message', function (data) {
 		fighters[shipId].vector.set(ships[i].vector[0], ships[i].vector[1], ships[i].vector[2]);
 		fighters[shipId].fire = ships[i].fire;
 		fighters[shipId].hit = ships[i].hit;
+
+    if(ships[i].hit) {
+      // buum
+      scene.remove(fighters[shipId].mesh);
+      delete fighters[shipId];
+    }
 
 		//TODO: removing
 	}

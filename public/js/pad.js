@@ -18,6 +18,10 @@ if (window.DeviceMotionEvent != undefined) {
     var sensitive = 300;
     var lastDate = Date.now();
 
+    var oldData = {};
+    oldData.x = 0;
+    oldData.y = 0;
+
     window.ondevicemotion = function (e) {
 
         var data = {
@@ -32,8 +36,15 @@ if (window.DeviceMotionEvent != undefined) {
             $('#xpad').html("x = " + scale(x));
             $('#ypad').html("y = " + scale(y));
 
-            data.x = scale(x);
-            data.y = scale(y);
+            console.info("OLD");
+            console.info(oldData.x);
+            console.info("NEW +");
+            console.info(scale(x));
+
+            data.x = checkMax(oldData.x + scale(x));
+            data.y = checkMax(oldData.y + scale(y));
+
+            oldData = data;
 
             console.info(data);
             socket.emit('pad', data);
@@ -41,8 +52,20 @@ if (window.DeviceMotionEvent != undefined) {
         }
     }
 
+    function checkMax(num) {
+        if (num > 1) {
+            return 1;
+        } else if (num < -1) {
+            return -1;
+        }
+
+        return num;
+    }
+
     function scale(num) {
-        return parseFloat(num / 10).toFixed(2)
+
+        var result = parseFloat(num / 10).toFixed(2) * 0.05;
+        return checkMax(result);
     }
 
 
