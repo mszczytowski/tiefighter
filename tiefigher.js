@@ -76,14 +76,18 @@ function getRandomPosition() {
 }
 
 function create(id) {
+  var position = [getRandomPosition(),getRandomPosition(),getRandomPosition()];
+  var vector = normalizeVector([position[0]*-1, position[1]*-1, position[2]*-1]);
+
   if(ships[id]) {
+    ships[id].position = position;
+    ships[id].vector = vector;
     return;
   }
-  position = [getRandomPosition(),getRandomPosition(),getRandomPosition()];
   ships[id] = {
     "id" : id,
     "position": position,
-    "vector": normalizeVector([position[0]*-1, position[1]*-1, position[2]*-1]),
+    "vector": vector,
     "rotation": getRandomVectionItem(),
     "fire": false,
     "hit": false
