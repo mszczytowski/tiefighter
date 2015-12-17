@@ -1,0 +1,43 @@
+body {
+    font-family: helvetica, arial, sans serif;
+    background: rgb(63,63,63);
+    color: #fff;
+}
+
+h1, h2 {
+    color: rgb(241,214,58);
+}
+
+section p {
+    font-weight: normal;
+    color: #fff;
+}
+
+section p span {
+    font-weight: bold;
+    color: rgb(241,214,58);
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    background: red;
+    padding: 0.3em 0.6em;
+    background: rgb(241,214,58);
+    color: rgb(63,63,63);
+    font-weight: bold;
+}
+
+@media all and (min-width: 700px) {
+
+    section {
+        display: inline-block;
+        width: 45%;
+        vertical-align: top;
+    }
+}

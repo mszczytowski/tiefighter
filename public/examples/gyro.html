@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Raw phone data - Gyroscope</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="../deviceapi-normaliser.js"></script>
+
+    <script type="text/javascript">
+
+        // these are holder objects we can load the values into
+        var current_orientation = null;
+        var current_motion = null;
+
+        var fps = 60;
+        var refresh_freq = 1000 / fps; //msec to update the screen
+
+		function update_gyro(e) {
+            // gets the gyro position
+            current_orientation = deviceOrientation(e);
+        }
+
+
+        var orientation_running = false;
+        var click_orientation = function() {
+            // click handler for the gyro function
+            if (orientation_running) {
+                // remove the event listener
+                window.removeEventListener("deviceorientation", update_gyro);
+                orientation_running = false;
+                $("#orientationtoggle span").text("Start");
+            } else {
+                window.addEventListener("deviceorientation", update_gyro, false);
+                orientation_running = true;
+                $("#orientationtoggle span").text("Stop");
+            }
+        }
+
+        $(document).ready(function() {
+
+            $("#orientationtoggle").bind("click", click_orientation);
+
+            value_updater = window.setInterval(function() {
+
+                // update the various elements in the page at a predefined
+                // frequency.
+
+                if (current_orientation !== null) {
+                    $("#xval").text(current_orientation.gamma);
+                    $("#yval").text(current_orientation.beta);
+                    $("#zval").text(current_orientation.alpha);
+
+                    $("#abs").text(current_orientation.absolute);
+                }
+
+            }, refresh_freq);
+
+        });
+
+
+    </script>
+</head>
+<body>
+    <div id="main">
+        <h1>Device data</h1>
+        <nav>
+            <ul>
+                <li id="orientationtoggle"><span>Start</span> Gyro Data</li>
+            </ul>
+        </nav>
+        <section id="orientation">
+            <h2>Gyro (Tilt)</h2>
+            <p>Alpha (compass): <span id="zval"></span></p>
+            <p>Beta: <span id="yval"></span></p>
+            <p>Gamma: <span id="xval"></span></p>
+            <p>Abs: <span id="abs"></span></p>
+        </section>
+    </div>
+</body>

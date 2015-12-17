@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Event Feature Detection</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src=../deviceapi-normaliser.js></script>
+    <script>
+
+        $(document).ready(function (){
+            mo.init();
+
+            var orientation = mo.orientation;
+            var motion = mo.motion;
+            var browser = mo._browser;
+            var os = mo._os;
+            var ua = mo._ua;
+
+            if (orientation) {
+                $("#orientation").text("Yes");
+            } else {
+                $("#orientation").text("Nope");
+            }
+
+            if (motion) {
+                $("#motion").text("Yes");
+            } else {
+                $("#motion").text("Nope");
+            }
+
+            $("#browser").text(browser);
+            $("#os").text(os);
+            $("#ua").text(ua);
+        });
+    </script>
+</head>
+<body>
+    <div id="main">
+        <h1>Attempt to detect motion and events</h1>
+        <h2>Can I detect an orientation event</h2>
+        <p id="orientation">No</p>
+
+        <h2>Can I detect a motion event</h2>
+        <p id="motion">No</p>
+        <h2>Detection:</h2>
+        <p>I am a <span id="browser"></span> browser running on <span id="os"></span> Operating System</p>
+        <p>Reporting: <span id="ua"></span></p>
+    </div>
+</body>
+</html>

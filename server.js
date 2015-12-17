@@ -1,7 +1,7 @@
 var socketIo = require('socket.io');
 var http     = require('http');
 var express  = require('express');
-var tiefigher  = require('./tiefigher');
+
 var number   = 1;
 
 var PORT = 3000;
@@ -20,10 +20,6 @@ app.get('/pad', function (req, res) {
   res.sendFile(__dirname + '/views/pad.html');
 });
 
-app.get('/test', function (req, res) {
-  res.sendFile(__dirname + '/views/test.html');
-});
-
 app.use(express.static(__dirname + '/public'));
 
 // Create HTTP server
@@ -40,21 +36,18 @@ io.listen(server);
 // Upon connection, start a periodic task that emits (every 1s) the current timestamp
 io.on('connection', function (socket) {
 
-  socket.on('start', function (data) {
-    tiefigher.start(data);
-
-    socket.on('disconnect', function(){
-      tiefigher.end(data);
-    });
-  });
-
-  socket.on('pad', function (data) {
-    tiefigher.pad(data);
+  socket.on('move', function (data) {
+    // console.log(data);
 	});
 
-  tiefigher.broadcast(function(data) {
-    socket.broadcast.emit('message', data);
-  });
+  socket.on('fire', function (data) {
+    console.log(data);
+	});
+
+  // wysłanie do wszystkich informacji o lokalizacjach
+  // o zniszczeniach, kolizjach, itp.
+
+  // socket.broadcast.emit('message', data);
 });
 
 server.listen(PORT);
