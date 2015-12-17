@@ -1,6 +1,6 @@
 require('array.prototype.find');
 
-var DIMENSION = 50000;
+var DIMENSION = 20000;
 var DEATH = 6371;
 var DEATH_2 = DEATH * 2;
 var SPEED = 1000;
@@ -127,6 +127,15 @@ function fire(id, fire) {
 
 exports.start = function(message) {
   create(message.id);
+  create(message.id + '_1');
+  create(message.id + '_2');
+  create(message.id + '_3');
+  create(message.id + '_4');
+  create(message.id + '_5');
+  create(message.id + '_6');
+  create(message.id + '_7');
+  create(message.id + '_8');
+  create(message.id + '_0');
 }
 
 exports.end = function(message) {
