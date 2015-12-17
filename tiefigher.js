@@ -1,7 +1,8 @@
 require('array.prototype.find');
 
 var DIMENSION = 50000;
-var DEATH = 10000;
+var DEATH = 6371;
+var DEATH_2 = DEATH * 2;
 var SPEED = 10000;
 var INTERVAL = 100;
 
@@ -39,18 +40,23 @@ function calculateRotation(rotation, joystick) {
 
 function calculateHit(hit, position) {
   if(hit) {
-    return hit;
+    return true;
   }
   if(position[0] <= -DIMENSION || position[0] >= DIMENSION) {
-    return hit;
+    return true;
   }
   if(position[1] <= -DIMENSION || position[1] >= DIMENSION) {
-    return hit;
+    return true;
   }
   if(position[2] <= -DIMENSION || position[2] >= DIMENSION) {
-    return hit;
+    return true;
   }
-  // zderzenie z gwiazdą
+  if(position[0] <= DEATH && position[0] >= -1*DEATH
+    && position[1] <= DEATH && position[1] >= -1*DEATH
+    && position[2] <= DEATH && position[2] >= -1*DEATH
+  ) {
+    return true;
+  }
   // strzał
   return false;
 }
@@ -60,11 +66,11 @@ function getRandomVectionItem() {
 }
 
 function getRandomPosition() {
-  var p = Math.round((getRandomVectionItem())*(DIMENSION-DEATH));
-  if(p > 0 && p < DEATH) {
-    p += DEATH;
-  } else if(p < 0 && p > -DEATH) {
-    p -= DEATH;
+  var p = Math.round((getRandomVectionItem())*(DIMENSION-DEATH_2));
+  if(p > 0 && p < DEATH_2) {
+    p += DEATH_2;
+  } else if(p < 0 && p > -DEATH_2) {
+    p -= DEATH_2;
   }
   return p;
 }
