@@ -339,7 +339,7 @@ socket.emit('start', {
 });
 
 function playFire() {
-	$("#laser").play();
+	$("#laser").trigger("play");
 }
 
 socket.on('message', function (data) {
@@ -358,7 +358,7 @@ socket.on('message', function (data) {
 					 scene.add(fighters[shipId].mesh);
 			} else {
 				if(fighters[shipId].fire) {
-
+					playFire();
 				}
 			}
 		}
