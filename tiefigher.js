@@ -143,8 +143,8 @@ exports.end = function(message) {
 }
 
 exports.pad = function(message) {
-  move(message.id, parseFloat(message.x), parseFloat(message.y), parseFloat(message.z) || 0);
   fire(message.id, message.fire);
+  move(message.id, parseFloat(message.x), parseFloat(message.y), parseFloat(message.z) || 0);
 }
 
 function calculate() {
