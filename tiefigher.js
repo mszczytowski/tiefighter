@@ -5,6 +5,7 @@ var DEATH = 6371;
 var DEATH_2 = DEATH * 2;
 var SPEED = 10000;
 var INTERVAL = 100;
+var MAXTILTCHANGE = 0.1;
 
 var broadcastCallback = null;
 
@@ -20,9 +21,13 @@ function normalizeVector(vector) {
 }
 
 function calculateVector(vector, joystick) {
-  vector[0] = vector[0] + joystick[0];
-  vector[1] = vector[1] + joystick[1];
-  vector[2] = vector[2]
+  var tau = Math.acos(vector[2]);
+  var fi = Math.atan(vector[1]/vector[0]);
+  tau += MAXTILTCHANGE * joystick[0];
+  fi += MAXTILTCHANGE * joystick[1];
+  vector[0] = Math.sin(tau) * Math.cos(fi);
+  vector[1] = Math.sin(tau) * Math.sin(fi);
+  vector[2] = Math.cos(tau);
   return normalizeVector(vector);
 }
 
