@@ -5,7 +5,7 @@ var DEATH = 6371;
 var DEATH_2 = DEATH * 2;
 var SPEED = 1000;
 var INTERVAL = 100;
-var MAXTILTCHANGE = 0.005;
+var MAXTILTCHANGE = 0.002;
 
 var broadcastCallback = null;
 
