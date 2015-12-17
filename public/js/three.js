@@ -74,9 +74,7 @@ function init() {
 
 		specular: 0x333333,
 		shininess: 15,
-		map: THREE.ImageUtils.loadTexture( "textures/planets/earth_atmos_2048.jpg" ),
-		specularMap: THREE.ImageUtils.loadTexture( "textures/planets/earth_specular_2048.jpg" ),
-		normalMap: THREE.ImageUtils.loadTexture( "textures/planets/earth_normal_2048.jpg" ),
+		map: THREE.ImageUtils.loadTexture( "textures/planets/deathstar.jpg" ),
 		normalScale: new THREE.Vector2( 0.85, 0.85 )
 
 	} );
@@ -90,22 +88,7 @@ function init() {
 	meshPlanet.rotation.z = tilt;
 	scene.add( meshPlanet );
 
-	// clouds
-
-	var materialClouds = new THREE.MeshLambertMaterial( {
-
-		map: THREE.ImageUtils.loadTexture( "textures/planets/earth_clouds_1024.png" ),
-		transparent: true
-
-	} );
-
-	meshClouds = new THREE.Mesh( geometry, materialClouds );
-	meshClouds.scale.set( cloudsScale, cloudsScale, cloudsScale );
-	meshClouds.rotation.z = tilt;
-	scene.add( meshClouds );
-
 	// moon
-
 	var materialMoon = new THREE.MeshPhongMaterial( {
 
 		map: THREE.ImageUtils.loadTexture( "textures/planets/moon_1024.jpg" )
@@ -270,7 +253,6 @@ function render() {
 	var delta = clock.getDelta();
 
 	meshPlanet.rotation.y += rotationSpeed * delta;
-	meshClouds.rotation.y += 1.25 * rotationSpeed * delta;
 
 	// slow down as we approach the surface
 
