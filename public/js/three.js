@@ -313,6 +313,12 @@ socket.on('message', function (data) {
 		fighters[shipId].fire = ships[i].fire;
 		fighters[shipId].hit = ships[i].hit;
 
+    if(ships[i].hit) {
+      // buum
+      scene.remove(fighters[shipId].mesh);
+      delete fighters[shipId];
+    }
+
 		//TODO: removing
 	}
 });
