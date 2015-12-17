@@ -52,11 +52,11 @@ var tieMaterial = {};
 loadObj('models/tie.obj', function() {
 	init();
 	animate();
-	console.log(tieObject, tieMaterial);
+	/*console.log(tieObject, tieMaterial);
 	var test = new THREE.Mesh(tieObject, tieMaterial);
 	test.position.set( -radius * 5, 0, 0 );
 	test.scale.set( 300, 300, 300);
-	scene.add( test);
+	scene.add( test);*/
 });
 
 function loadObj(name, callback) {
@@ -145,7 +145,7 @@ function init() {
 		}
 		fighters[data.ships[i].id] = {};
 		fighters[data.ships[i].id].mesh = new THREE.Mesh(tieObject, tieMaterial);
-		fighters[data.ships[i].id].mesh.scale.set( 50, 50, 50);
+		fighters[data.ships[i].id].mesh.scale.set( 30, 30, 30);
 		//fighters[data.ships[i].id].mesh = tieObject.clone();//new THREE.Mesh( tieObject.mesh.clone(), materialFighter );
 		fighters[data.ships[i].id].mesh.position.set( data.ships[i].position[0], data.ships[i].position[1], data.ships[i].position[2] );
 		fighters[data.ships[i].id].vector = new THREE.Vector3(data.ships[i].vector[0], data.ships[i].vector[1], data.ships[i].vector[2]);
@@ -337,7 +337,7 @@ socket.on('message', function (data) {
 			fighters[shipId] = {};
 			fighters[shipId].mesh = new THREE.Mesh(tieObject, tieMaterial);
 			fighters[shipId].mesh.position.set( -radius * 4, 0, 0 );
-			fighters[shipId].mesh.scale.set( 300, 300, 300);
+			fighters[shipId].mesh.scale.set( 30, 30, 30);
 			fighters[shipId].vector = new THREE.Vector3(0, 0, 0);
 			scene.add(fighters[shipId].mesh);
 		}
