@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tie fighter</title>
+<style>
+	body {
+		padding:0;
+		margin:0;
+    width: 100%;
+    height: 100%;
+	}
+</style>
+</head>
+<body>
+  <button id="fire">FIRE</button>
+	<hr />
+	<input id="x" value="0"></input>
+	<input id="y" value="0"></input>
+	<button id="move">MOVE</button>
+	<hr />
+	<p>Position: <span id="dposition">undefined</span></p>
+	<p>Vector: <span id="dvector">undefined</span></p>
+	<p>Fire: <span id="dfire">undefined</span></p>
+	<p>Hit: <span id="dhit">undefined</span></p>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.7/socket.io.min.js"></script>
+  <script src="js/test.js"></script>
+</body>
+</html>
