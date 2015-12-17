@@ -4,12 +4,10 @@ var oldData = {};
 oldData.x;
 oldData.y;
 
-$('#fire').on('mousedown', function (e) {
-
+$('body').on('touchstart', function (e) {
     var data = {
         id: window.location.hash.substr(1)
     };
-
     data.fire = true;
     data.x = oldData.x;
     data.y = oldData.y;
