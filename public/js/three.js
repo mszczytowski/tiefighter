@@ -25,19 +25,21 @@ var d, dPlanet, dMoon, dMoonVec = new THREE.Vector3();
 
 var clock = new THREE.Clock();
 
+var TIE_SPEED = 0.001; //100 punktów na sekunde
+
 var data = {
   ships: [
     {
       id: 1,
       position: [radius * 5, 0, 0],
-      vector: [-50, -50 ,0],
+      vector: [-1, -1 ,0],
       fire: false,
       hit: false,
     },
 		{
 			id: 3,
 			position: [radius * 5, 0, 0],
-			vector: [-50, 50 ,0],
+			vector: [-1, 1 ,0],
 			fire: false,
 			hit: false,
 		}
@@ -109,10 +111,12 @@ function init() {
 		{
 			continue;
 		}
-		fighters[data.ships[i].id] = new THREE.Mesh( fighterGeometry, materialFighter );
-		fighters[data.ships[i].id].position.set( data.ships[i].position[0], data.ships[i].position[1], data.ships[i].position[2] );
-		fighters[data.ships[i].id].scale.set( moonScale, moonScale, moonScale );
-		scene.add( fighters[data.ships[i].id] );
+		fighters[data.ships[i].id] = {};
+		fighters[data.ships[i].id].mesh = new THREE.Mesh( fighterGeometry, materialFighter );
+		fighters[data.ships[i].id].mesh.position.set( data.ships[i].position[0], data.ships[i].position[1], data.ships[i].position[2] );
+		fighters[data.ships[i].id].vector = new THREE.Vector3(data.ships[i].vector[0], data.ships[i].vector[1], data.ships[i].vector[2]);
+		fighters[data.ships[i].id].mesh.scale.set( moonScale, moonScale, moonScale );
+		scene.add( fighters[data.ships[i].id].mesh );
 	}
 
 	data.ships.push(
@@ -220,34 +224,38 @@ function onWindowResize( event ) {
 }
 
 function animate() {
-
 	requestAnimationFrame( animate );
-
+	update();
 	render();
 }
 
-function render() {
+var lastCalledTime;
 
-	// move fighters
-	for (var i = 0; i < data.ships.length; i++) {
-		if (data.ships[i].id == id)
-		{
-			continue;
-		}
-		var fighterDirection = new THREE.Vector3(data.ships[i].vector[0], data.ships[i].vector[1], data.ships[i].vector[2]);
-		// add missing fighters
-		if (!fighters.hasOwnProperty(data.ships[i].id))
-		{
-			var materialFighter = new THREE.MeshNormalMaterial();
-			var fighterGeometry = new THREE.CubeGeometry( 2500, 2500, 2500 );
-			fighters[data.ships[i].id] = new THREE.Mesh( fighterGeometry, materialFighter );
-			fighters[data.ships[i].id].position.set( data.ships[i].position[0], data.ships[i].position[1], data.ships[i].position[2] );
-			fighters[data.ships[i].id].scale.set( moonScale, moonScale, moonScale );
-			scene.add( fighters[data.ships[i].id] );
-		}
-		fighters[data.ships[i].id].position.add(fighterDirection);
+function update() {
+	if(!lastCalledTime) {
+		lastCalledTime = Date.now();
+		return;
 	}
 
+	delta = (new Date().getTime() - lastCalledTime)/1000;
+	lastCalledTime = Date.now();
+
+	var currentDeltaInSeconds = delta/1000;
+
+	var deltaSpeed = TIE_SPEED/currentDeltaInSeconds;
+
+	for(var key in fighters) {
+		var fighter = fighters[key];
+		var x = fighter.mesh.position.x + fighter.vector.x*deltaSpeed;
+		var y = fighter.mesh.position.y + fighter.vector.y*deltaSpeed;
+		var z = fighter.mesh.position.z + fighter.vector.z*deltaSpeed;
+		fighter.mesh.position.set(x, y, z);
+		console.log(fighter.vector);
+		console.log(fighter.mesh.position);
+	};
+}
+
+function render() {
 	// rotate the planet and clouds
 
 	var delta = clock.getDelta();
@@ -285,10 +293,23 @@ socket.emit('start', {
 
 socket.on('message', function (data) {
 	var ships = data.ships;
-	var ship = ships.find(function(item) {
-		return item.id == id;
-	});
-	if(ship !== undefined) {
-		console.log(ship);
+	for(var i = 0; i < ships.length; i++) {
+		var shipId = ships[i].id;
+		if (!fighters.hasOwnProperty(shipId))
+		{
+			var materialFighter = new THREE.MeshNormalMaterial();
+			var fighterGeometry = new THREE.CubeGeometry( 2500, 2500, 2500 );
+			fighters[shipId] = {};
+			fighters[shipId].mesh = new THREE.Mesh( fighterGeometry, materialFighter );
+			fighters[data.ships[i].id].vector = new THREE.Vector3(0, 0, 0);
+			fighters[shipId].mesh.scale.set( moonScale, moonScale, moonScale );
+			scene.add(fighters[shipId].mesh);
+		}
+		fighters[shipId].mesh.position.set(ships[i].position[0], ships[i].position[1], ships[i].position[2] );
+		fighters[shipId].vector.set(ships[i].vector[0], ships[i].vector[1], ships[i].vector[2]);
+		fighters[shipId].fire = ships[i].fire;
+		fighters[shipId].hit = ships[i].hit;
+
+		//TODO: removing
 	}
 });

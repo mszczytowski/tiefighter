@@ -1,4 +1,4 @@
-var socket = io.connect();
+var socket = io();
 
 var id = window.location.hash.substr(1);
 
@@ -29,6 +29,7 @@ $('#fire').on('click', function(e) {
 });
 
 socket.on('message', function (data) {
+	console.log(data);
 	var ship = data.ships.find(function(item) {
 		return item.id === id;
 	});
