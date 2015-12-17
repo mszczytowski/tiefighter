@@ -9,6 +9,7 @@
   "dependencies": {
     "socket.io": "latest",
     "http": "latest",
-    "express": "latest"
+    "express": "latest",
+    "array.prototype.find": "latest"
   }
 }
