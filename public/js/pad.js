@@ -4,7 +4,7 @@ var oldData = {};
 oldData.x;
 oldData.y;
 
-$('#container').on('click', function (e) {
+$('#fire').on('mousedown', function (e) {
 
     var data = {
         id: window.location.hash.substr(1)

@@ -125,6 +125,7 @@ function move(id, x, y, z) {
 }
 
 function fire(id, fire) {
+  console.log(fire);
   if(ships[id] === undefined) return;
   fires[id] = fire;
 }
