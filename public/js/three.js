@@ -60,13 +60,13 @@ function init() {
 	scene = new THREE.Scene();
 	scene.fog = new THREE.FogExp2( 0x000000, 0.00000025 );
 
-	controls = new THREE.FlyControls( camera );
+	// controls = new THREE.FlyControls( camera );
 
-	controls.movementSpeed = 1000;
-	controls.domElement = container;
-	controls.rollSpeed = Math.PI / 24;
-	controls.autoForward = false;
-	controls.dragToLook = false;
+	// controls.movementSpeed = 1000;
+	// controls.domElement = container;
+	// controls.rollSpeed = Math.PI / 24;
+	// controls.autoForward = false;
+	// controls.dragToLook = false;
 
 	dirLight = new THREE.DirectionalLight( 0xffffff );
 	dirLight.position.set( -1, 0, 1 ).normalize();
@@ -282,8 +282,8 @@ function render() {
 
 	}
 
-	controls.movementSpeed = 0.33 * d;
-	controls.update( delta );
+	// controls.movementSpeed = 0.33 * d;
+	// controls.update( delta );
 
 	renderer.clear();
 	composer.render( delta );

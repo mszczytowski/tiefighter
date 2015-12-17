@@ -28,6 +28,7 @@ function calculateVector(vector, joystick) {
   vector[0] = Math.sin(tau) * Math.cos(fi);
   vector[1] = Math.sin(tau) * Math.sin(fi);
   vector[2] = Math.cos(tau);
+  console.log(normalizeVector(vector));
   return normalizeVector(vector);
 }
 
@@ -173,13 +174,13 @@ function calculate() {
     ship.vector = calculateVector(ship.vector, joysticks[key]);
     ship.position = calculatePosition(ship.position, ship.vector, timestamp - timestamps[key]);
     ship.rotation = calculateRotation(ship.rotation, joysticks[key]);
-    ship.hit = calculateHit(ship.hit, ship.position);
+    ship.hit = false; // calculateHit(ship.hit, ship.position);
 
     timestamps[key] = timestamp;
 
-    if(ship.hit) {
-      hits[key] = true;
-    }
+    // if(ship.hit) {
+    //   hits[key] = true;
+    // }
   });
 
   var message = {
