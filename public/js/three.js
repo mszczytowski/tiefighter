@@ -60,7 +60,7 @@ loadObj('models/tie.obj', function() {
 });
 
 function loadObj(name, callback) {
-	var texture = THREE.ImageUtils.loadTexture( "models/UV_Grid_Sm.jpg" );
+	var texture = THREE.ImageUtils.loadTexture( "textures/tie.png" );
 	var loader = new THREE.OBJLoader( );
 	loader.load( name, function ( object ) {
 
