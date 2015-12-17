@@ -338,6 +338,10 @@ socket.emit('start', {
 	"id": id
 });
 
+function playFire() {
+	$("#laser").play();
+}
+
 socket.on('message', function (data) {
 	var ships = data.ships;
 	for(var i = 0; i < ships.length; i++) {
@@ -350,9 +354,13 @@ socket.on('message', function (data) {
 			fighters[shipId].mesh.position.set( -radius * 4, 0, 0 );
 			fighters[shipId].mesh.scale.set( 30, 30, 30);
 			fighters[shipId].vector = new THREE.Vector3(0, 0, 0);
-      if(id != shipId) {
-			     scene.add(fighters[shipId].mesh);
-         }
+			if(id != shipId) {
+					 scene.add(fighters[shipId].mesh);
+			} else {
+				if(fighters[shipId].fire) {
+
+				}
+			}
 		}
 		fighters[shipId].mesh.position.set(ships[i].position[0], ships[i].position[1], ships[i].position[2] );
 		fighters[shipId].vector.set(ships[i].vector[0], ships[i].vector[1], ships[i].vector[2]);
