@@ -1,7 +1,8 @@
 require('array.prototype.find');
 
-var DIMENSION = 10000;
-var SPEED = 0.01; // per second
+var DIMENSION = 50000;
+var DEATH = 10000;
+var SPEED = 0.001;
 var INTERVAL = 1000;
 
 var broadcastCallback = null;
@@ -59,14 +60,21 @@ function getRandomVectionItem() {
 }
 
 function getRandomPosition() {
-  return Math.round((getRandomVectionItem())*10000);
+  var p = Math.round((getRandomVectionItem())*(DIMENSION-DEATH));
+  if(p > 0 && p < DEATH) {
+    p += DEATH;
+  } else if(p < 0 && p > -DEATH) {
+    p -= DEATH;
+  }
+  return p;
 }
 
 function create(id) {
+  position = [getRandomPosition(),getRandomPosition(),getRandomPosition()];
   ships[id] = {
     "id" : id,
-    "position": [getRandomPosition(),getRandomPosition(),getRandomPosition()],
-    "vector": [getRandomVectionItem(),getRandomVectionItem(),getRandomVectionItem()],
+    "position": position,
+    "vector": normalizeVector([position[0]*-1, position[1]*-1, position[2]*-1]),
     "rotation": getRandomVectionItem(),
     "fire": false,
     "hit": false
