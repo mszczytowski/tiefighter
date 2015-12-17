@@ -1,5 +1,8 @@
 var socket = io.connect();
 
+var oldData = {};
+oldData.x;
+oldData.y;
 
 $('#container').on('click', function (e) {
 
@@ -8,6 +11,8 @@ $('#container').on('click', function (e) {
     };
 
     data.fire = true;
+    data.x = oldData.x;
+    data.y = oldData.y;
     console.info(data);
     socket.emit('pad', data);
 });
@@ -17,10 +22,6 @@ if (window.DeviceMotionEvent != undefined) {
 
     var sensitive = 300;
     var lastDate = Date.now();
-
-    var oldData = {};
-    oldData.x = 0;
-    oldData.y = 0;
 
     window.ondevicemotion = function (e) {
 
@@ -36,13 +37,14 @@ if (window.DeviceMotionEvent != undefined) {
             $('#xpad').html("x = " + scale(x));
             $('#ypad').html("y = " + scale(y));
 
-            console.info("OLD");
-            console.info(oldData.x);
-            console.info("NEW +");
-            console.info(scale(x));
+            //console.info("OLD");
+            //console.info(oldData.x);
+            //console.info("NEW +");
+            //console.info(scale(x));
 
             data.x = checkMax(scale(x));
             data.y = checkMax(scale(y));
+            data.fire = false;
 
             oldData = data;
 
