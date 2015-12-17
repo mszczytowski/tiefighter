@@ -20,6 +20,7 @@ var camera, controls, scene, sceneCube, renderer;
 var geometry, meshPlanet, meshClouds, meshMoon;
 var fighters = {};
 var dirLight, pointLight, ambientLight;
+var fires = [];
 
 var d, dPlanet, dMoon, dMoonVec = new THREE.Vector3();
 
@@ -275,6 +276,13 @@ function update() {
 
 	var deltaSpeed = TIE_SPEED*delta;
 
+for (var i = 0; i < fires.length; i++) {
+	var line = lines.pop();
+	if (line) {
+		scene.remove(line);
+	}
+}
+
 	for(var key in fighters) {
 		var fighter = fighters[key];
 		var x = fighter.mesh.position.x + fighter.vector.x*deltaSpeed;
@@ -292,14 +300,14 @@ function update() {
 if (fighters[id].fire) {
 	var material = new THREE.LineBasicMaterial({
 		color: 0xff0000
-});
-var geometry = new THREE.Geometry();
-geometry.vertices.push(new THREE.Vector3(fighters[id].mesh.position.x + 20, fighters[id].mesh.position.y, fighters[id].mesh.position.z));
-geometry.vertices.push(new THREE.Vector3(fighters[id].mesh.position.x + (fighters[id].vector.x)*10000, fighters[id].mesh.position.y + (fighters[id].vector.y)*10000, fighters[id].mesh.position.z + (fighters[id].vector.z)*10000));
-var line = new THREE.Line(geometry, material);
-	scene.add(line);
-}
-
+	});
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(new THREE.Vector3(fighters[id].mesh.position.x + 20, fighters[id].mesh.position.y, fighters[id].mesh.position.z));
+	geometry.vertices.push(new THREE.Vector3(fighters[id].mesh.position.x + (fighters[id].vector.x)*10000, fighters[id].mesh.position.y + (fighters[id].vector.y)*10000, fighters[id].mesh.position.z + (fighters[id].vector.z)*10000));
+	var line = new THREE.Line(geometry, material);
+	fires.push(line);
+		scene.add(line);
+	}
 	}
 }
 
