@@ -288,6 +288,17 @@ function update() {
 		camera.position.y = fighters[id].mesh.position.y;
 		camera.position.z = fighters[id].mesh.position.z;
 		camera.lookAt(new THREE.Vector3(fighters[id].mesh.position.x + (fighters[id].vector.x)*delta, fighters[id].mesh.position.y + (fighters[id].vector.y*delta), fighters[id].mesh.position.z + (fighters[id].vector.z*delta)));
+
+		if (fighters[id].fire) {
+			var material = new THREE.LineBasicMaterial({
+        color: 0xff0000
+    });
+		var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(fighters[id].mesh.position.x, fighters[id].mesh.position.y, fighters[id].mesh.position.z));
+    geometry.vertices.push(new THREE.Vector3(fighters[id].mesh.position.x + (fighters[id].vector.x)*10000, fighters[id].mesh.position.y + (fighters[id].vector.y)*10000, fighters[id].mesh.position.z + (fighters[id].vector.z)*10000));
+		var line = new THREE.Line(geometry, material);
+			scene.add(line);
+		}
 	}
 }
 
