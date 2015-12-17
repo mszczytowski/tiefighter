@@ -25,7 +25,7 @@ var d, dPlanet, dMoon, dMoonVec = new THREE.Vector3();
 
 var clock = new THREE.Clock();
 
-var TIE_SPEED = 0.001; //100 punktów na sekunde
+var TIE_SPEED = 1; //100 punktów na sekunde
 
 var data = {
   ships: [
@@ -240,9 +240,7 @@ function update() {
 	delta = (new Date().getTime() - lastCalledTime)/1000;
 	lastCalledTime = Date.now();
 
-	var currentDeltaInSeconds = delta/1000;
-
-	var deltaSpeed = TIE_SPEED/currentDeltaInSeconds;
+	var deltaSpeed = TIE_SPEED/delta;
 
 	for(var key in fighters) {
 		var fighter = fighters[key];
@@ -250,8 +248,9 @@ function update() {
 		var y = fighter.mesh.position.y + fighter.vector.y*deltaSpeed;
 		var z = fighter.mesh.position.z + fighter.vector.z*deltaSpeed;
 		fighter.mesh.position.set(x, y, z);
-		console.log(fighter.vector);
 		console.log(fighter.mesh.position);
+    console.log(fighter.vector);
+		// console.log(fighter.mesh.position);
 	};
 }
 
