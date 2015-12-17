@@ -18,11 +18,31 @@ var SCREEN_WIDTH  = window.innerWidth;
 var container, stats;
 var camera, controls, scene, sceneCube, renderer;
 var geometry, meshPlanet, meshClouds, meshMoon;
+var fighters = {};
 var dirLight, pointLight, ambientLight;
 
 var d, dPlanet, dMoon, dMoonVec = new THREE.Vector3();
 
 var clock = new THREE.Clock();
+
+var data = {
+  ships: [
+    {
+      id: 1,
+      position: [radius * 5, 0, 0],
+      vector: [-50, -50 ,0],
+      fire: false,
+      hit: false,
+    },
+		{
+			id: 3,
+			position: [radius * 5, 0, 0],
+			vector: [-50, 50 ,0],
+			fire: false,
+			hit: false,
+		}
+  ]
+}
 
 init();
 animate();
@@ -96,6 +116,30 @@ function init() {
 	meshMoon.position.set( radius * 5, 0, 0 );
 	meshMoon.scale.set( moonScale, moonScale, moonScale );
 	scene.add( meshMoon );
+
+	// fighters
+	var materialFighter = new THREE.MeshNormalMaterial();
+	var fighterGeometry = new THREE.CubeGeometry( 2500, 2500, 2500 )
+	for (var i = 0; i < data.ships.length; i++)
+	{
+		if (data.ships[i].id == id)
+		{
+			continue;
+		}
+		fighters[data.ships[i].id] = new THREE.Mesh( fighterGeometry, materialFighter );
+		fighters[data.ships[i].id].position.set( data.ships[i].position[0], data.ships[i].position[1], data.ships[i].position[2] );
+		fighters[data.ships[i].id].scale.set( moonScale, moonScale, moonScale );
+		scene.add( fighters[data.ships[i].id] );
+	}
+
+	data.ships.push(
+	{
+		id: 2,
+		position: [-radius * 5, 0, 0],
+		vector: [50, 0, -50],
+		fire: false,
+		hit: false,
+	});
 
 	// stars
 
@@ -200,6 +244,26 @@ function animate() {
 }
 
 function render() {
+
+	// move fighters
+	for (var i = 0; i < data.ships.length; i++) {
+		if (data.ships[i].id == id)
+		{
+			continue;
+		}
+		var fighterDirection = new THREE.Vector3(data.ships[i].vector[0], data.ships[i].vector[1], data.ships[i].vector[2]);
+		// add missing fighters
+		if (!fighters.hasOwnProperty(data.ships[i].id))
+		{
+			var materialFighter = new THREE.MeshNormalMaterial();
+			var fighterGeometry = new THREE.CubeGeometry( 2500, 2500, 2500 );
+			fighters[data.ships[i].id] = new THREE.Mesh( fighterGeometry, materialFighter );
+			fighters[data.ships[i].id].position.set( data.ships[i].position[0], data.ships[i].position[1], data.ships[i].position[2] );
+			fighters[data.ships[i].id].scale.set( moonScale, moonScale, moonScale );
+			scene.add( fighters[data.ships[i].id] );
+		}
+		fighters[data.ships[i].id].position.add(fighterDirection);
+	}
 
 	// rotate the planet and clouds
 
