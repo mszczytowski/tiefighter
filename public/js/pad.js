@@ -24,6 +24,6 @@ if (window.DeviceMotionEvent != undefined) {
 			data.gamma = e.rotationRate.gamma;
 		}
 
-		socket.emit('move', data);
+		socket.emit('pad', data);
 	}
 }

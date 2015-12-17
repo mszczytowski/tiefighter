@@ -1,6 +1,7 @@
 var socketIo = require('socket.io');
 var http     = require('http');
 var express  = require('express');
+var tiefigher  = require('./tiefigher');
 var number   = 1;
 
 var PORT = 3000;
@@ -35,18 +36,17 @@ io.listen(server);
 // Upon connection, start a periodic task that emits (every 1s) the current timestamp
 io.on('connection', function (socket) {
 
-  socket.on('move', function (data) {
-    // console.log(data);
+  socket.on('connect', function (data) {
+    tiefigher.connect(data);
+  });
+
+  socket.on('pad', function (data) {
+    tiefigher.pad(data);
 	});
 
-  socket.on('fire', function (data) {
-    console.log(data);
-	});
-
-  // wysłanie do wszystkich informacji o lokalizacjach
-  // o zniszczeniach, kolizjach, itp.
-
-  // socket.broadcast.emit('message', data);
+  tiefigher.broadcast(function(data) {
+    socket.broadcast.emit('message', data);
+  });
 });
 
 server.listen(PORT);
