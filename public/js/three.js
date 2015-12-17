@@ -25,7 +25,7 @@ var d, dPlanet, dMoon, dMoonVec = new THREE.Vector3();
 
 var clock = new THREE.Clock();
 
-var TIE_SPEED = 0.001; //100 punktów na sekunde
+var TIE_SPEED = 1; //100 punktów na sekunde
 
 var data = {
   ships: [
@@ -76,9 +76,7 @@ function init() {
 
 		specular: 0x333333,
 		shininess: 15,
-		map: THREE.ImageUtils.loadTexture( "textures/planets/earth_atmos_2048.jpg" ),
-		specularMap: THREE.ImageUtils.loadTexture( "textures/planets/earth_specular_2048.jpg" ),
-		normalMap: THREE.ImageUtils.loadTexture( "textures/planets/earth_normal_2048.jpg" ),
+		map: THREE.ImageUtils.loadTexture( "textures/planets/deathstar.jpg" ),
 		normalScale: new THREE.Vector2( 0.85, 0.85 )
 
 	} );
@@ -92,22 +90,7 @@ function init() {
 	meshPlanet.rotation.z = tilt;
 	scene.add( meshPlanet );
 
-	// clouds
-
-	var materialClouds = new THREE.MeshLambertMaterial( {
-
-		map: THREE.ImageUtils.loadTexture( "textures/planets/earth_clouds_1024.png" ),
-		transparent: true
-
-	} );
-
-	meshClouds = new THREE.Mesh( geometry, materialClouds );
-	meshClouds.scale.set( cloudsScale, cloudsScale, cloudsScale );
-	meshClouds.rotation.z = tilt;
-	scene.add( meshClouds );
-
 	// moon
-
 	var materialMoon = new THREE.MeshPhongMaterial( {
 
 		map: THREE.ImageUtils.loadTexture( "textures/planets/moon_1024.jpg" )
@@ -257,9 +240,7 @@ function update() {
 	delta = (new Date().getTime() - lastCalledTime)/1000;
 	lastCalledTime = Date.now();
 
-	var currentDeltaInSeconds = delta/1000;
-
-	var deltaSpeed = TIE_SPEED/currentDeltaInSeconds;
+	var deltaSpeed = TIE_SPEED/delta;
 
 	for(var key in fighters) {
 		var fighter = fighters[key];
@@ -267,8 +248,9 @@ function update() {
 		var y = fighter.mesh.position.y + fighter.vector.y*deltaSpeed;
 		var z = fighter.mesh.position.z + fighter.vector.z*deltaSpeed;
 		fighter.mesh.position.set(x, y, z);
-		console.log(fighter.vector);
 		console.log(fighter.mesh.position);
+    console.log(fighter.vector);
+		// console.log(fighter.mesh.position);
 	};
 }
 
@@ -278,7 +260,6 @@ function render() {
 	var delta = clock.getDelta();
 
 	meshPlanet.rotation.y += rotationSpeed * delta;
-	meshClouds.rotation.y += 1.25 * rotationSpeed * delta;
 
 	// slow down as we approach the surface
 

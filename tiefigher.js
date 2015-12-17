@@ -1,8 +1,9 @@
 require('array.prototype.find');
 
-var DIMENSION = 10000;
-var SPEED = 0.01; // per second
-var INTERVAL = 1000;
+var DIMENSION = 50000;
+var DEATH = 10000;
+var SPEED = 1000;
+var INTERVAL = 100;
 
 var broadcastCallback = null;
 
@@ -26,9 +27,9 @@ function calculateVector(vector, joystick) {
 
 function calculatePosition(position, vector, delta) {
   var s = delta*SPEED/1000.0;
-  position[0] = position[0] + (vector[0] * SPEED);
-  position[1] = position[1] + (vector[1] * SPEED);
-  position[2] = position[2] + (vector[2] * SPEED);
+  position[0] = position[0] + (vector[0] * s);
+  position[1] = position[1] + (vector[1] * s);
+  position[2] = position[2] + (vector[2] * s);
   return position;
 }
 
@@ -59,14 +60,24 @@ function getRandomVectionItem() {
 }
 
 function getRandomPosition() {
-  return Math.round((getRandomVectionItem())*10000);
+  var p = Math.round((getRandomVectionItem())*(DIMENSION-DEATH));
+  if(p > 0 && p < DEATH) {
+    p += DEATH;
+  } else if(p < 0 && p > -DEATH) {
+    p -= DEATH;
+  }
+  return p;
 }
 
 function create(id) {
+  if(ships[id]) {
+    return;
+  }
+  position = [getRandomPosition(),getRandomPosition(),getRandomPosition()];
   ships[id] = {
     "id" : id,
-    "position": [getRandomPosition(),getRandomPosition(),getRandomPosition()],
-    "vector": [getRandomVectionItem(),getRandomVectionItem(),getRandomVectionItem()],
+    "position": position,
+    "vector": normalizeVector([position[0]*-1, position[1]*-1, position[2]*-1]),
     "rotation": getRandomVectionItem(),
     "fire": false,
     "hit": false
@@ -135,8 +146,9 @@ function calculate() {
   Object.keys(ships).forEach(function(key) {
     var ship = ships[key];
     var timestamp = new Date().getTime();
+
     ship.vector = calculateVector(ship.vector, joysticks[key]);
-    ship.position = calculatePosition(ship.position, ship.vector, timestamp - timestamps.key);
+    ship.position = calculatePosition(ship.position, ship.vector, timestamp - timestamps[key]);
     ship.rotation = calculateRotation(ship.rotation, joysticks[key]);
     ship.hit = calculateHit(ship.hit, ship.position);
 

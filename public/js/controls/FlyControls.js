@@ -224,6 +224,29 @@ THREE.FlyControls = function ( object, domElement ) {
 
 	};
 
+	this.updateMovement = function(x, y) {
+
+		var forward = ( this.moveState.forward || ( this.autoForward && ! this.moveState.back ) ) ? 1 : 0;
+
+		this.moveVector.x = ( x );
+		this.moveVector.y = ( y );
+		this.moveVector.z = ( - forward + this.moveState.back );
+
+		//console.log( 'move:', [ this.moveVector.x, this.moveVector.y, this.moveVector.z ] );
+
+};
+
+this.updateRotation = function(x, y) {
+
+		this.rotationVector.x = ( x );
+		this.rotationVector.y = ( y );
+		this.rotationVector.z = ( - this.moveState.rollRight + this.moveState.rollLeft );
+
+		//console.log( 'rotate:', [ this.rotationVector.x, this.rotationVector.y, this.rotationVector.z ] );
+
+};
+
+
 	this.getContainerDimensions = function() {
 
 		if ( this.domElement != document ) {
