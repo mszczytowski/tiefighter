@@ -5,7 +5,7 @@ $('#container').on('click', function(e) {
 		id: window.location.hash.substr(1)
 	};
 
-	socket.emit('fire', data);
+	socket.emit('pad', data);
 });
 
 if (window.DeviceMotionEvent != undefined) {
