@@ -3,9 +3,9 @@ require('array.prototype.find');
 var DIMENSION = 50000;
 var DEATH = 6371;
 var DEATH_2 = DEATH * 2;
-var SPEED = 10000;
+var SPEED = 1000;
 var INTERVAL = 100;
-var MAXTILTCHANGE = 0.1;
+var MAXTILTCHANGE = 0.005;
 
 var broadcastCallback = null;
 
@@ -27,12 +27,7 @@ function calculateVector(vector, joystick) {
   // fi += MAXTILTCHANGE * joystick[1];
   // vector[0] = Math.sin(tau) * Math.cos(fi);
   // vector[1] = Math.sin(tau) * Math.sin(fi);
-  // vector[2] = Math.cos(tau);
-
-  vector[0] = vector[0] + (joystick[0] > 0 ? 0.1 : -0.1);
-  vector[1] = vector[1] + (joystick[1] > 0 ? 0.1 : -0.1);
-  vector[2] = vector[2];
-  // console.log(normalizeVector(vector));
+  // vector[2] = Math.cos(fi);
   return normalizeVector(vector);
 }
 
@@ -132,14 +127,6 @@ function fire(id, fire) {
 
 exports.start = function(message) {
   create(message.id);
-  create(message.id + '_1');
-  create(message.id + '_2');
-  create(message.id + '_3');
-  create(message.id + '_4');
-  create(message.id + '_5');
-  create(message.id + '_6');
-  create(message.id + '_7');
-  create(message.id + '_9');
 }
 
 exports.end = function(message) {

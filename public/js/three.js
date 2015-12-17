@@ -25,7 +25,7 @@ var d, dPlanet, dMoon, dMoonVec = new THREE.Vector3();
 
 var clock = new THREE.Clock();
 
-var TIE_SPEED = 10000; //100 punktów na sekunde
+var TIE_SPEED = 1000; //100 punktów na sekunde
 
 var data = {
   ships: [
@@ -287,7 +287,7 @@ function update() {
 		camera.position.x = fighters[id].mesh.position.x;
 		camera.position.y = fighters[id].mesh.position.y;
 		camera.position.z = fighters[id].mesh.position.z;
-		camera.lookAt(new THREE.Vector3(fighters[id].mesh.position.x + fighters[id].vector.x, fighters[id].mesh.position.y + fighters[id].vector.y, fighters[id].mesh.position.z + fighters[id].vector.z));
+		camera.lookAt(new THREE.Vector3(fighters[id].mesh.position.x + (fighters[id].vector.x)*delta, fighters[id].mesh.position.y + (fighters[id].vector.y*delta), fighters[id].mesh.position.z + (fighters[id].vector.z*delta)));
 	}
 }
 
