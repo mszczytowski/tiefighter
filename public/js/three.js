@@ -1,3 +1,7 @@
+var socket = io.connect();
+
+var id = window.location.hash.substr(1);
+
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 var radius = 6371;
@@ -192,7 +196,7 @@ function animate() {
 
 	requestAnimationFrame( animate );
 
-	render();	
+	render();
 }
 
 function render() {
@@ -228,3 +232,17 @@ function render() {
 	composer.render( delta );
 
 }
+
+socket.emit('start', {
+	"id": id
+});
+
+socket.on('message', function (data) {
+	var ships = data.ships;
+	var ship = ships.find(function(item) {
+		return item.id == id;
+	});
+	if(ship !== undefined) {
+		console.log(ship);
+	}
+});
