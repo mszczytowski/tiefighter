@@ -248,10 +248,14 @@ function update() {
 		var y = fighter.mesh.position.y + fighter.vector.y*deltaSpeed;
 		var z = fighter.mesh.position.z + fighter.vector.z*deltaSpeed;
 		fighter.mesh.position.set(x, y, z);
-		console.log(fighter.mesh.position);
-    console.log(fighter.vector);
-		// console.log(fighter.mesh.position);
 	};
+
+	if (fighters.hasOwnProperty(id)) {
+		camera.position.x = fighters[id].mesh.position.x;
+		camera.position.y = fighters[id].mesh.position.y;
+		camera.position.z = fighters[id].mesh.position.z;
+		camera.lookAt(new THREE.Vector3(fighters[id].mesh.position.x + fighters[id].vector.x, fighters[id].mesh.position.y + fighters[id].vector.y, fighters[id].mesh.position.z + fighters[id].vector.z));
+	}
 }
 
 function render() {
