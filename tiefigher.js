@@ -21,13 +21,13 @@ function normalizeVector(vector) {
 }
 
 function calculateVector(vector, joystick) {
-  // var tau = Math.acos(vector[2]);
-  // var fi = Math.atan(vector[1]/vector[0]);
-  // tau += MAXTILTCHANGE * joystick[0];
-  // fi += MAXTILTCHANGE * joystick[1];
-  // vector[0] = Math.sin(tau) * Math.cos(fi);
-  // vector[1] = Math.sin(tau) * Math.sin(fi);
-  // vector[2] = Math.cos(fi);
+  var tau = Math.acos(vector[2]);
+  var fi = Math.atan(vector[1]/vector[0]);
+  tau += MAXTILTCHANGE * joystick[1];
+  fi += MAXTILTCHANGE * joystick[0] * -1;
+  vector[0] = Math.sin(tau) * Math.cos(fi);
+  vector[1] = Math.sin(tau) * Math.sin(fi);
+  vector[2] = Math.cos(tau);
   return normalizeVector(vector);
 }
 

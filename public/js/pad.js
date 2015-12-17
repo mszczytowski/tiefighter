@@ -41,8 +41,8 @@ if (window.DeviceMotionEvent != undefined) {
             console.info("NEW +");
             console.info(scale(x));
 
-            data.x = checkMax(oldData.x + scale(x));
-            data.y = checkMax(oldData.y + scale(y));
+            data.x = checkMax(scale(x));
+            data.y = checkMax(scale(y));
 
             oldData = data;
 
@@ -64,10 +64,9 @@ if (window.DeviceMotionEvent != undefined) {
 
     function scale(num) {
 
-        var result = parseFloat(num / 10).toFixed(2) * 0.05;
+        var result = parseFloat(num / 10).toFixed(2); //  * 0.15;
         return checkMax(result);
     }
 
 
 }
-
