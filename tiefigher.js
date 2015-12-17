@@ -1,6 +1,8 @@
 require('array.prototype.find');
 
 var DIMENSION = 10000;
+var SPEED = 50;
+var INTERVAL = 100;
 
 var broadcastCallback = null;
 
@@ -19,7 +21,7 @@ function getRandomVectionItem() {
 }
 
 function getRandomPosition() {
-  Math.round((getRandomVectionItem())*10000)
+  return Math.round((getRandomVectionItem())*10000);
 }
 
 function create(id) {
@@ -34,7 +36,14 @@ function create(id) {
     "id": id,
     "x": 0.0,
     "y": 0.0,
+    "z": 0.0,
   });
+}
+
+function destroy(id) {
+  var ship = getById(data.ships, id);
+  if(ship === undefined) return;
+  ship.hit = true;
 }
 
 function move(id, x, y) {
@@ -42,6 +51,7 @@ function move(id, x, y) {
   if(ship === undefined) return;
   ship.x = x;
   ship.y = y;
+  ship.z = z || 0.0;
 }
 
 function fire(id, fire) {
@@ -52,6 +62,10 @@ function fire(id, fire) {
 
 exports.start = function(message) {
   create(message.id);
+}
+
+exports.end = function(message) {
+  destroy(message.id);
 }
 
 exports.pad = function(message) {
@@ -66,5 +80,5 @@ function calculate() {
 
 exports.broadcast = function(callback) {
   broadcastCallback = callback;
-  setInterval(calculate, 100);
+  setInterval(calculate, INTERVAL);
 }

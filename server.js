@@ -42,6 +42,10 @@ io.on('connection', function (socket) {
 
   socket.on('start', function (data) {
     tiefigher.start(data);
+
+    socket.on('disconnect', function(){
+      tiefigher.end(data);
+    });
   });
 
   socket.on('pad', function (data) {
