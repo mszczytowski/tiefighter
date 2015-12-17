@@ -80,9 +80,13 @@ function getRandomPosition() {
   return p;
 }
 
-function create(id) {
+function create(id, rand) {
   var position = [getRandomPosition(),getRandomPosition(),getRandomPosition()];
   var vector = normalizeVector([position[0]*-1, position[1]*-1, position[2]*-1]);
+
+  if(rand) {
+    vector = normalizeVector([getRandomVectionItem(), getRandomVectionItem(), getRandomVectionItem()]);
+  }
 
   if(ships[id]) {
     ships[id].position = position;
@@ -126,16 +130,12 @@ function fire(id, fire) {
 }
 
 exports.start = function(message) {
-  create(message.id);
-  create(message.id + '_1');
-  create(message.id + '_2');
-  create(message.id + '_3');
-  create(message.id + '_4');
-  create(message.id + '_5');
-  create(message.id + '_6');
-  create(message.id + '_7');
-  create(message.id + '_8');
-  create(message.id + '_0');
+  create(message.id, false);
+
+  for(i = 0; i < 1000; i++) {
+    create(message.id + '_' + i, true);
+  }
+
 }
 
 exports.end = function(message) {
@@ -174,13 +174,13 @@ function calculate() {
     ship.vector = calculateVector(ship.vector, joysticks[key]);
     ship.position = calculatePosition(ship.position, ship.vector, timestamp - timestamps[key]);
     ship.rotation = calculateRotation(ship.rotation, joysticks[key]);
-    ship.hit = false; // calculateHit(ship.hit, ship.position);
+    ship.hit = calculateHit(ship.hit, ship.position);
 
     timestamps[key] = timestamp;
 
-    // if(ship.hit) {
-    //   hits[key] = true;
-    // }
+    if(ship.hit) {
+      hits[key] = true;
+    }
   });
 
   var message = {
