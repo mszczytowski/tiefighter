@@ -25,7 +25,7 @@ var d, dPlanet, dMoon, dMoonVec = new THREE.Vector3();
 
 var clock = new THREE.Clock();
 
-var TIE_SPEED = 1; //100 punktów na sekunde
+var TIE_SPEED = 10000; //100 punktów na sekunde
 
 var data = {
   ships: [
@@ -240,7 +240,7 @@ function update() {
 	delta = (new Date().getTime() - lastCalledTime)/1000;
 	lastCalledTime = Date.now();
 
-	var deltaSpeed = TIE_SPEED/delta;
+	var deltaSpeed = TIE_SPEED*delta;
 
 	for(var key in fighters) {
 		var fighter = fighters[key];

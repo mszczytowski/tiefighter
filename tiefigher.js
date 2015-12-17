@@ -2,7 +2,7 @@ require('array.prototype.find');
 
 var DIMENSION = 50000;
 var DEATH = 10000;
-var SPEED = 1000;
+var SPEED = 10000;
 var INTERVAL = 100;
 
 var broadcastCallback = null;
@@ -112,6 +112,14 @@ function fire(id, fire) {
 
 exports.start = function(message) {
   create(message.id);
+  create(message.id + '_1');
+  create(message.id + '_2');
+  create(message.id + '_3');
+  create(message.id + '_4');
+  create(message.id + '_5');
+  create(message.id + '_6');
+  create(message.id + '_7');
+  create(message.id + '_9');
 }
 
 exports.end = function(message) {
