@@ -46,8 +46,40 @@ var data = {
   ]
 }
 
-init();
-animate();
+var tieObject = {};
+var tieMaterial = {};
+
+loadObj('models/tie.obj', function() {
+	init();
+	animate();
+	console.log(tieObject, tieMaterial);
+	var test = new THREE.Mesh(tieObject, tieMaterial);
+	test.position.set( -radius * 5, 0, 0 );
+	test.scale.set( 300, 300, 300);
+	scene.add( test);
+});
+
+function loadObj(name, callback) {
+	var texture = THREE.ImageUtils.loadTexture( "models/UV_Grid_Sm.jpg" );
+	var loader = new THREE.OBJLoader( );
+	loader.load( name, function ( object ) {
+
+		object.traverse( function ( child ) {
+			if ( child instanceof THREE.Mesh ) {
+				child.material.map = texture;
+				tieObject = child.geometry;
+				tieMaterial = child.material;
+			}
+		} );
+
+		//object.position.set( -radius * 5, 0, 0 );
+		//object.scale.set( 300, 300, 300);
+
+		//scene.add( object );
+		//tieObject = object;
+		callback();
+	});
+}
 
 function init() {
 
@@ -112,10 +144,11 @@ function init() {
 			continue;
 		}
 		fighters[data.ships[i].id] = {};
-		fighters[data.ships[i].id].mesh = new THREE.Mesh( fighterGeometry, materialFighter );
+		fighters[data.ships[i].id].mesh = new THREE.Mesh(tieObject, tieMaterial);
+		fighters[data.ships[i].id].mesh.scale.set( 50, 50, 50);
+		//fighters[data.ships[i].id].mesh = tieObject.clone();//new THREE.Mesh( tieObject.mesh.clone(), materialFighter );
 		fighters[data.ships[i].id].mesh.position.set( data.ships[i].position[0], data.ships[i].position[1], data.ships[i].position[2] );
 		fighters[data.ships[i].id].vector = new THREE.Vector3(data.ships[i].vector[0], data.ships[i].vector[1], data.ships[i].vector[2]);
-		fighters[data.ships[i].id].mesh.scale.set( moonScale, moonScale, moonScale );
 		scene.add( fighters[data.ships[i].id].mesh );
 	}
 
@@ -297,11 +330,11 @@ socket.on('message', function (data) {
 		if (!fighters.hasOwnProperty(shipId))
 		{
 			var materialFighter = new THREE.MeshNormalMaterial();
-			var fighterGeometry = new THREE.CubeGeometry( 2500, 2500, 2500 );
 			fighters[shipId] = {};
-			fighters[shipId].mesh = new THREE.Mesh( fighterGeometry, materialFighter );
-			fighters[data.ships[i].id].vector = new THREE.Vector3(0, 0, 0);
-			fighters[shipId].mesh.scale.set( moonScale, moonScale, moonScale );
+			fighters[shipId].mesh = new THREE.Mesh(tieObject, tieMaterial);
+			fighters[shipId].mesh.position.set( -radius * 4, 0, 0 );
+			fighters[shipId].mesh.scale.set( 300, 300, 300);
+			fighters[shipId].vector = new THREE.Vector3(0, 0, 0);
 			scene.add(fighters[shipId].mesh);
 		}
 		fighters[shipId].mesh.position.set(ships[i].position[0], ships[i].position[1], ships[i].position[2] );
